@@ -30,10 +30,27 @@ class Configuration_path:
 
 #TODO put into the class, enter starting configuration if it is used
 configuration_path = Configuration_path(config_length=3, in_sum=3, path_length=5, start_configuration=3)
-lst = [[configuration_path.in_sum-sum(p)] + p for p in configuration_path.partition(configuration_path.in_sum, configuration_path.config_length-1)]
-lst_indx = np.arange(len(lst))
-print(lst)
-print(choice(lst,p=[0.7,0.2,0.1], size=100))
+configurations = [[configuration_path.in_sum-sum(p)] + p for p in configuration_path.partition(configuration_path.in_sum, configuration_path.config_length-1)]
+configuration_indicies = np.arange(len(configurations))
+
+probabilityMatrix = [[1/len(configuration_indicies) for i in range(len(configuration_indicies))] for j in range(len(configuration_indicies))]
+current_configuration = 0 #Initial Condition
+for t in range(2):
+    current_configuration = choice(configuration_indicies, p=probabilityMatrix[current_configuration])
+    
+    for i in range(len(probabilityMatrix)):
+        
+        first_nonzero_probability = next((x for x in probabilityMatrix[i] if x != 0), None)
+        #Normalizes the probabilities of going from one configuration to another since going back to itself is 0, we do not want loops.
+        F = (1 / (2*first_nonzero_probability)) / (1 + probabilityMatrix[i][current_configuration]/(2*first_nonzero_probability))
+
+        for j in range(len(probabilityMatrix[i])):
+            if (j == current_configuration):
+                probabilityMatrix[i][j] = 0
+            else:
+                probabilityMatrix[i][j] *= F
+        
+    probabilityMatrix[current_configuration] = 0
 
 #Likhetsmått: |v1 - v2|/2. Hög likhet -> Högre sannolikhet
 #Entropimått: [3,0,0] = Hög entropi, [1,1,1] = Låg entropi. Min[Sum[Ceil[v1/edges]], Sum[Ceil[v2/edges]]] Hög entropi -> Högre sannolikhet
