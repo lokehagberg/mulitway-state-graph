@@ -28,8 +28,8 @@ class Configuration_path:
 
 
 #TODO put into the class, enter starting configuration if it is used
-config_length = 3
-configuration_path = Configuration_path(config_length=config_length, in_sum=3, path_length=5, start_configuration=3)
+config_length = 4
+configuration_path = Configuration_path(config_length=config_length, in_sum=4, path_length=5, start_configuration=3)
 configurations = [np.array([configuration_path.in_sum-sum(p)] + p) for p in configuration_path.partition(configuration_path.in_sum, configuration_path.config_length-1)]
 configuration_indicies = np.arange(len(configurations))
 
@@ -44,7 +44,11 @@ for i in range(len(configurations)):
     entropy_similarity = 0
     for z in range(len(configurations)):
         if (z!=i):
+            
+            #Pertubation similaruty tells us how similar two configurations are.
             pertubation_similarity += 2 / (np.sum(np.abs(configurations[i] - configurations[z])))
+            
+            #Example: [3,0,0] is a low entropy configuration, [1,1,1] is a high entropy configuration.
             entropy_similarity += 2 / (np.sum(np.abs(highest_entropy_configuration - configurations[z])))
 
     for j in range(len(configurations)):
@@ -55,14 +59,11 @@ for i in range(len(configurations)):
 
 
 
-#Likhetsmått: |v1 - v2|/2. Hög likhet -> Högre sannolikhet
-# likhetsmått = np.abs(np.array(configurations[0]) - np.array([configurations[1]]))/2
-#Entropimått: [3,0,0] = Hög entropi, [1,1,1] = Låg entropi. Min[Sum[Ceil[v1/edges]], Sum[Ceil[v2/edges]]] Hög entropi -> Högre sannolikhet
 
 
 
 current_configuration = 0 #Initial Condition
-for t in range(9):
+for t in range(15):
     current_configuration = choice(configuration_indicies, p=probabilityMatrix[current_configuration])
     
     for i in range(len(probabilityMatrix)):
