@@ -1,6 +1,6 @@
 import math as ma
 import numpy as np
-import matplotlib.pyplot as plt 
+# import matplotlib.pyplot as plt 
 from numpy.random import choice
 
 
@@ -35,23 +35,23 @@ configuration_indicies = np.arange(len(configurations))
 
 probabilityMatrix = [[1/len(configuration_indicies) for i in range(len(configuration_indicies))] for j in range(len(configuration_indicies))]
 current_configuration = 0 #Initial Condition
-for t in range(2):
+for t in range(9):
     current_configuration = choice(configuration_indicies, p=probabilityMatrix[current_configuration])
     
     for i in range(len(probabilityMatrix)):
-        
+
         first_nonzero_probability = next((x for x in probabilityMatrix[i] if x != 0), None)
         #Normalizes the probabilities of going from one configuration to another since going back to itself is 0, we do not want loops.
-        F = (1 / (2*first_nonzero_probability)) / (1 + probabilityMatrix[i][current_configuration]/(2*first_nonzero_probability))
-
+        F = 1 / (1 - probabilityMatrix[i][current_configuration])
+        
         for j in range(len(probabilityMatrix[i])):
             if (j == current_configuration):
                 probabilityMatrix[i][j] = 0
             else:
                 probabilityMatrix[i][j] *= F
         
-    probabilityMatrix[current_configuration] = 0
 
+    print(probabilityMatrix)
 #Likhetsmått: |v1 - v2|/2. Hög likhet -> Högre sannolikhet
 #Entropimått: [3,0,0] = Hög entropi, [1,1,1] = Låg entropi. Min[Sum[Ceil[v1/edges]], Sum[Ceil[v2/edges]]] Hög entropi -> Högre sannolikhet
 
