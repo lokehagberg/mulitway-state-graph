@@ -30,6 +30,9 @@ class Configuration_path:
 #TODO put into the class, enter starting configuration if it is used
 config_length = 4
 in_sum=4
+weight = 0.9
+timesteps = 25
+
 configuration_path = Configuration_path(config_length=config_length, in_sum=in_sum, path_length=5, start_configuration=3)
 configurations = [np.array([configuration_path.in_sum-sum(p)] + p) for p in configuration_path.partition(configuration_path.in_sum, configuration_path.config_length-1)]
 configurations *= in_sum
@@ -38,7 +41,6 @@ configuration_indicies = np.arange(len(configurations))
 
 #Initialization of the Matrix
 probabilityMatrix = [[1/len(configuration_indicies) for i in range(len(configuration_indicies))] for j in range(len(configuration_indicies))]
-weight = 0.9
 highest_entropy_configuration = np.array([0.5 for i in range(config_length)])
 for i in range(len(configurations)):
 
@@ -69,7 +71,7 @@ for i in range(len(configurations)):
 
 
 current_configuration = 0 #Initial Condition
-for t in range(25):
+for t in range(timesteps):
     current_configuration = choice(configuration_indicies, p=probabilityMatrix[current_configuration])
     
     for i in range(len(probabilityMatrix)):
@@ -92,7 +94,7 @@ for t in range(25):
 # over known universal time, experiences of a kind stays of that kind (there are multiple
 # multiway graphs that are coordinated). Looking at the configuration path, we will not get information about which
 # ones change frequently and which ones that do not, it gives us a set of 
-# possibilities as a function of |V|, |E|, and the trade-off 
+# possibilities as a function of |V|, |E|, the number of time steps and the trade-off 
 # weight between similarity and entropy (that is weighted toward similarity). 
 # What then is the linear possibility set like (check frequency and spatial graphs)? and what 
 # happens in the dynamic case, where the dynamics is linear (entropy's speed actually
