@@ -92,7 +92,7 @@ for t in range(timesteps):
 # We have assumed that we have the following linear principles: because the change frequency is 
 # higher with some experiences, similarity is higher than not, entropy increases 
 # over known universal time, experiences of a kind stays of that kind (there are multiple
-# multiway graphs that are coordinated). Looking at the configuration path, we will not get information about which
+# multiway state graphs that are coordinated). Looking at the configuration path, we will not get information about which
 # ones change frequently and which ones that do not, it gives us a set of 
 # possibilities as a function of |V|, |E|, the number of time steps and the trade-off 
 # weight between similarity and entropy (that is weighted toward similarity). 
