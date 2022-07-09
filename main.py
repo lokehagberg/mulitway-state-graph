@@ -96,8 +96,8 @@ for t in range(timesteps):
 # ones change frequently and which ones that do not, it gives us a set of 
 # possibilities as a function of |V|, |E|, the number of time steps and the trade-off 
 # weight between similarity and entropy (that is weighted toward similarity). 
-# What then is the linear possibility set like (check frequency and spatial graphs)? and what 
-# happens in the dynamic case, where the dynamics is linear (entropy's speed actually
-# decreases with an expanding universe but does so linearly as the universe expands 
-# with a constant speed uniformly) (the universe is less light-like, so similarity 
-# should matter more, see compositional change)? 
+# What then is the linear possibility set like (check frequency and spatial graphs)?  
+# By Life, gravity and the second law of thermodynamics - Charles H. Lineweaver, Chas A. Egan
+# and Entropy in an Expanding Universe - Steven Frautschi, entropy increases in a linear way (except possibly after
+# a large number of time-steps). Frequency statistically have a large distribution at most times, 
+# making the similarity measurement motivated. 
