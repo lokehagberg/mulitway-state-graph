@@ -2,7 +2,8 @@ import math as ma
 import numpy as np
 # import matplotlib.pyplot as plt 
 from numpy.random import choice
-
+import matplotlib.pyplot as plt
+import networkx as nx
 
 class Configuration_path:
     
@@ -28,10 +29,10 @@ class Configuration_path:
 
 
 #TODO put into the class, enter starting configuration if it is used
-config_length = 4
-in_sum=4
+config_length = 3
+in_sum=3
 weight = 0.9
-timesteps = 25
+timesteps = 5
 
 configuration_path = Configuration_path(config_length=config_length, in_sum=in_sum, path_length=5, start_configuration=3)
 configurations = [np.array([configuration_path.in_sum-sum(p)] + p) for p in configuration_path.partition(configuration_path.in_sum, configuration_path.config_length-1)]
@@ -71,9 +72,11 @@ for i in range(len(configurations)):
 
 
 current_configuration = 0 #Initial Condition
+actualized_configuration_path = []
 for t in range(timesteps):
     current_configuration = choice(configuration_indicies, p=probabilityMatrix[current_configuration])
-    
+    actualized_configuration_path.append(configurations[current_configuration])
+
     for i in range(len(probabilityMatrix)):
 
         first_nonzero_probability = next((x for x in probabilityMatrix[i] if x != 0), None)
@@ -87,8 +90,31 @@ for t in range(timesteps):
                 probabilityMatrix[i][j] *= F
         
 
-    print(configurations[current_configuration])
     
+configuration_history = np.asarray(actualized_configuration_path)  
+configuration_history_trimmed = []  
+for configuration in configuration_history:
+    configuration_history_trimmed.append(np.delete(configuration, np.where(configuration == 0)))
+
+
+print(configuration_history_trimmed)
+
+G = nx.Graph()
+pos = {}
+for i in range(configuration_history_trimmed):
+    for j in range(configuration_history_trimmed[i]):
+        G.add_node(i*10 + j)
+        pos.update({i*10 + j:[i,j]})
+
+print(G.nodes)
+# G.add_node(12)
+# G.add_node(21)
+# G.add_node(22)
+# G.add_edge(11,21)
+# G.add_edge(12,22)
+# nx.draw(G, {12:[1,2],21:[2,1], 11:[1,1], 22:[2,2]}, with_labels=True)
+# plt.show()  
+
 # We have assumed that we have the following linear principles: because the change frequency is 
 # higher with some experiences, similarity is higher than not, entropy increases 
 # over known universal time, experiences of a kind stays of that kind (there are multiple
