@@ -125,26 +125,22 @@ for i in range(len(configuration_history_trimmed)):
         else: 
             config_diff = configuration_history_trimmed[i] - configuration_history_trimmed[i-1]
 
-        k = 0
         m = 0
         while len(config_diff) > m:
-            if (config_diff[m] == 0):
+            if (config_diff[m] >= 0):
                 m+=1
             else:
-                if (config_diff[m] < 0):
-                    k = 0
-                    while len(config_diff) > k:
-                        if (config_diff[k] > 0):
-                            G.add_edge((i-1)*10 + m, i*10 + k)
-                            config_diff[m] = config_diff[m] + 1
-                            config_diff[k] = config_diff[k] - 1
-                            m+=1
-                            k+=len(config_diff) + 1
-                        else:
-                            k+=1
-                    m+=1
-                else:
-                    m+=1
+                k = 0
+                while len(config_diff) > k:
+                    if (config_diff[k] > 0):
+                        G.add_edge((i-1)*10 + m, i*10 + k)
+                        config_diff[m] += 1
+                        config_diff[k] += -1
+                        m+=1
+                        k+=len(config_diff) + 1
+                    else:
+                        k+=1
+                m+=1
 
 
 
