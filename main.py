@@ -1,4 +1,5 @@
 import math as ma
+from this import d
 import numpy as np
 # import matplotlib.pyplot as plt 
 from numpy.random import choice
@@ -43,12 +44,12 @@ configuration_indicies = np.arange(len(configurations))
 #Initialization of the Matrix
 probabilityMatrix = [[1/len(configuration_indicies) for i in range(len(configuration_indicies))] for j in range(len(configuration_indicies))]
 highest_entropy_configuration = np.array([0.5 for i in range(config_length)])
-for i in range(len(configurations)):
+for k in range(len(configurations)):
 
     pertubation_similarity = 0
     entropy_similarity = 0
     for z in range(len(configurations)):
-        configuration_difference = configurations[i] - configurations[z]
+        configuration_difference = configurations[k] - configurations[z]
         if (configuration_difference.all(0)):
             
             #Pertubation similaruty tells us how similar two configurations are.
@@ -57,18 +58,18 @@ for i in range(len(configurations)):
             #Example: [3,0,0] is a low entropy configuration, [1,1,1] is a high entropy configuration.
             entropy_similarity += 2 / (np.sum(np.abs(highest_entropy_configuration - configurations[z])))
 
-    for j in range(len(configurations)):
+    for m in range(len(configurations)):
 
-        configuration_difference = configurations[i] - configurations[j] 
+        configuration_difference = configurations[k] - configurations[m] 
 
         if (not configuration_difference.all(0)):
-            probabilityMatrix[i][j] = 0
+            probabilityMatrix[k][m] = 0
 
         else:
             similarity_component = (weight*(2 / np.sum(np.abs(configuration_difference))))/pertubation_similarity
-            entropy_component = (1 - weight)*((2/np.sum(np.abs(highest_entropy_configuration - configurations[j])))/entropy_similarity)
+            entropy_component = (1 - weight)*((2/np.sum(np.abs(highest_entropy_configuration - configurations[m])))/entropy_similarity)
 
-            probabilityMatrix[i][j] = similarity_component + entropy_component
+            probabilityMatrix[k][m] = similarity_component + entropy_component
 
 
 current_configuration = 0 #Initial Condition
@@ -77,21 +78,22 @@ for t in range(timesteps):
     current_configuration = choice(configuration_indicies, p=probabilityMatrix[current_configuration])
     actualized_configuration_path.append(configurations[current_configuration])
 
-    for i in range(len(probabilityMatrix)):
+    for k in range(len(probabilityMatrix)):
 
-        first_nonzero_probability = next((x for x in probabilityMatrix[i] if x != 0), None)
+        first_nonzero_probability = next((x for x in probabilityMatrix[k] if x != 0), None)
         #Normalizes the probabilities of going from one configuration to another since going back to itself is 0, we do not want loops.
-        F = 1 / (1 - probabilityMatrix[i][current_configuration])
+        F = 1 / (1 - probabilityMatrix[k][current_configuration])
         
-        for j in range(len(probabilityMatrix[i])):
-            if (j == current_configuration):
-                probabilityMatrix[i][j] = 0
+        for m in range(len(probabilityMatrix[k])):
+            if (m == current_configuration):
+                probabilityMatrix[k][m] = 0
             else:
-                probabilityMatrix[i][j] *= F
+                probabilityMatrix[k][m] *= F
         
 
     
 configuration_history = np.asarray(actualized_configuration_path)  
+print(configuration_history)
 configuration_history_trimmed = []  
 for configuration in configuration_history:
     configuration_history_trimmed.append(np.delete(configuration, np.where(configuration == 0)))
@@ -101,19 +103,60 @@ print(configuration_history_trimmed)
 
 G = nx.Graph()
 pos = {}
-for i in range(configuration_history_trimmed):
-    for j in range(configuration_history_trimmed[i]):
+for i in range(len(configuration_history_trimmed)):
+    for j in range(len(configuration_history_trimmed[i])):
+        
         G.add_node(i*10 + j)
-        pos.update({i*10 + j:[i,j]})
+        pos.update([(i*10 + j,[i,j])])
 
-print(G.nodes)
+        diff = len(configuration_history_trimmed[i]) - len(configuration_history_trimmed[i-1])
+        config_diff = []
+        if diff > 0:
+            zer = np.array([0 for i in range(diff)])
+            newcon = np.concatenate((configuration_history_trimmed[i-1], zer))
+            config_diff = configuration_history_trimmed[i] - newcon
+        
+        elif diff < 0:
+            zer = np.array([0 for i in range(diff)])
+            newcon = np.concatenate((configuration_history_trimmed[i], zer))
+            config_diff = newcon - configuration_history_trimmed[i]
+        else: 
+            config_diff = configuration_history_trimmed[i] - configuration_history_trimmed[i-1]
+
+            # while config_diff.any(1):
+            #     for i in range(len(config_length)):
+            #         if (i != 0):
+            #             G.add_edge((i-1)*10 + j, i*10 + i)
+        if (i != 0):
+
+            m = 0
+            while m in range(len(config_diff)):
+                if (config_diff[m] == 0):
+                    m+=1
+                else:
+                    if (config_diff[m] < 0):
+                        k = 0
+                        while k in range(len(config_diff)):
+                            if (config_diff[k] > 0):
+                                G.add_edge((i-1)*10 + m, i*10 + k)
+                                config_diff[m] = config_diff[m] + 1
+                                config_diff[k] = config_diff[k] - 1
+                                m+=1
+                                k+=len(config_diff) + 1
+                    else:
+                        m+=1
+
+    G.add_edge(20,30)
+
+print(G)
+# print(pos)
 # G.add_node(12)
 # G.add_node(21)
 # G.add_node(22)
 # G.add_edge(11,21)
 # G.add_edge(12,22)
-# nx.draw(G, {12:[1,2],21:[2,1], 11:[1,1], 22:[2,2]}, with_labels=True)
-# plt.show()  
+nx.draw(G, pos, with_labels=True)
+plt.show()  
 
 # We have assumed that we have the following linear principles: because the change frequency is 
 # higher with some experiences, similarity is higher than not, entropy increases 
