@@ -109,22 +109,22 @@ for i in range(len(configuration_history_trimmed)):
         G.add_node(i*10 + j)
         pos.update([(i*10 + j,[i,j])])
 
-    diff = len(configuration_history_trimmed[i]) - len(configuration_history_trimmed[i-1])
-    config_diff = []
-    if diff > 0:
-        zer = np.array([0 for i in range(diff)])
-        newcon = np.concatenate((configuration_history_trimmed[i-1], zer))
-        config_diff = configuration_history_trimmed[i] - newcon
-    
-    elif diff < 0:
-        zer = np.array([0 for i in range(diff)])
-        newcon = np.concatenate((configuration_history_trimmed[i], zer))
-        config_diff = newcon - configuration_history_trimmed[i]
-    else: 
-        config_diff = configuration_history_trimmed[i] - configuration_history_trimmed[i-1]
-
-
     if (i != 0):
+           
+        diff = len(configuration_history_trimmed[i]) - len(configuration_history_trimmed[i-1])
+        config_diff = []
+        if diff > 0:
+            zer = np.array([0 for i in range(diff)])
+            newcon = np.concatenate((configuration_history_trimmed[i-1], zer))
+            config_diff = configuration_history_trimmed[i] - newcon
+        
+        elif diff < 0:
+            zer = np.array([0 for i in range(diff)])
+            newcon = np.concatenate((configuration_history_trimmed[i], zer))
+            config_diff = newcon - configuration_history_trimmed[i]
+        else: 
+            config_diff = configuration_history_trimmed[i] - configuration_history_trimmed[i-1]
+
 
         m = 0
         while m in range(len(config_diff)):
