@@ -121,7 +121,7 @@ for i in range(len(configuration_history_trimmed)):
         elif diff < 0:
             zer = np.array([0 for i in range(abs(diff))])
             newcon = np.concatenate((configuration_history_trimmed[i], zer))
-            config_diff = newcon - configuration_history_trimmed[i]
+            config_diff = newcon - configuration_history_trimmed[i-1]
         else: 
             config_diff = configuration_history_trimmed[i] - configuration_history_trimmed[i-1]
 
