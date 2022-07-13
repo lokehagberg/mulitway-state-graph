@@ -123,24 +123,21 @@ for i in range(len(configuration_history_trimmed)):
             
             for n in range(len(con2)):
                 
-                if((con1[m] > 0) and (con2[n] >= con1[m]) and ([m,n] not in double_edge)):
-                    G.add_edge((i-1)*10 + m, i*10 + n)
-                    con2[n] = con2[n] - con1[m]
+                if((con1[m] > 0) and (con2[((m+n)%len(con2))] >= con1[m]) and ([m,((m+n)%len(con2))] not in double_edge)):
+                    G.add_edge((i-1)*10 + m, i*10 + ((m+n)%len(con2)))
+                    con2[((m+n)%len(con2))] = con2[((m+n)%len(con2))] - con1[m]
                     con1[m] = 0
-                    double_edge.append([m,n])
+                    double_edge.append([m,((m+n)%len(con2))])
                     
                 
-                elif((con1[m] > 0) and (con1[m] > con2[n]) and ([m,n] not in double_edge)):
-                    G.add_edge((i-1)*10 + m, i*10 + n)
-                    con1[m] = con1[m] - con2[n]
-                    con2[n] = 0
-                    double_edge.append([m,n])
+                elif((con1[m] > 0) and (con1[m] > con2[((m+n)%len(con2))]) and ([m,((m+n)%len(con2))] not in double_edge)):
+                    G.add_edge((i-1)*10 + m, i*10 + ((m+n)%len(con2)))
+                    con1[m] = con1[m] - con2[((m+n)%len(con2))]
+                    con2[((m+n)%len(con2))] = 0
+                    double_edge.append([m,((m+n)%len(con2))])
             
                                 
-        
-
-#The convention is that the first nodes are generally where there are faster changes over universal time, 
-# frequency changes that are more changing must be added.
+#The convention is that nodes are more likely to stay than diverge.
 
 print(G)
 nx.draw(G, pos, with_labels=True)
@@ -151,7 +148,6 @@ plt.show()
 # 2. experiences are more scrambled in the future as entropy increases over known universal time. 
 # 3. entropy either emerges or comes by a linearly added weight to similarity.
 # 4. experiences of a kind stays of that kind (there are multiple multiway state graphs that are coordinated). 
-# 5. the convention of having faster nodes first.
 # What then is the linear possibility set like (check frequency and spatial graphs)?  
 
 # By Life, gravity and the second law of thermodynamics - Charles H. Lineweaver, Chas A. Egan
