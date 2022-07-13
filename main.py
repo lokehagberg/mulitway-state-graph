@@ -30,10 +30,10 @@ class Configuration_path:
 
 
 #TODO put into the class, enter starting configuration if it is used
-config_length = 3
-in_sum=3
+config_length = 4
+in_sum=4
 weight = 0.9
-timesteps = 5
+timesteps = 7
 
 configuration_path = Configuration_path(config_length=config_length, in_sum=in_sum, path_length=5, start_configuration=3)
 configurations = [np.array([configuration_path.in_sum-sum(p)] + p) for p in configuration_path.partition(configuration_path.in_sum, configuration_path.config_length-1)]
@@ -118,29 +118,23 @@ for i in range(len(configuration_history_trimmed)):
         con1 = deepcopy(configuration_history_trimmed[i-1])
         con2 = deepcopy(configuration_history_trimmed[i])
         for m in range(len(con1)):
-            double_edge = {-1}
-            for k in range(len(con2)):
-                if ((con1[m] > 0) and (con1[m] > con2[k])):
-                    for q in range(len(con2)):
-                        if((con2[q] > 0) and (q not in double_edge)):
-                            G.add_edge((i-1)*10 + m, i*10 + q)
-                            con1[m] += -1
-                            con2[q] += -1
-                            double_edge.add(q)
-                            k = 0
-                elif((con1[m] > 0) and (con1[m] < con2[k])):
-                    for q in range(len(con1)):
-                        if((con1[q] > 0) and (k not in double_edge)):
-                            G.add_edge((i-1)*10 + q, i*10 + k)
-                            con1[q] += -1
-                            con2[k] += -1
-                            double_edge.add(k)
-                            k = 0
-                elif((con1[m] > 0) and (con2[k] > 0) and (k not in double_edge)):
-                    G.add_edge((i-1)*10 + m, i*10 + k)
-                    con1[m] = 0
-                    con2[k] = 0
-                    double_edge.add(k)
+            while(con1[m] != 0):
+                double_edge = {-1}
+                for k in range(len(con2)):
+                    if ((con1[m] != 0) and (con1[m] != con2[k])):
+                        for q in range(len(con2)):
+                            if((con2[q] > 0) and (q not in double_edge)):
+                                G.add_edge((i-1)*10 + m, i*10 + q)
+                                con1[m] += -1
+                                con2[q] += -1
+                                double_edge.add(q)
+                                #k = 0
+                    elif((con1[m] != 0) and (con1[m] == con2[k]) and (k not in double_edge)):
+                        G.add_edge((i-1)*10 + m, i*10 + k)
+                        con1[m] = 0
+                        con2[k] = 0
+                        double_edge.add(k)
+        
 
 #The convention is that the first nodes are generally where there are faster changes over universal time, 
 # frequency changes that are more changing must be added.
