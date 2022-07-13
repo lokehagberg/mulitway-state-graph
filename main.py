@@ -120,20 +120,24 @@ for i in range(len(configuration_history_trimmed)):
         for m in range(len(con1)):
             while(con1[m] != 0):
                 double_edge = {-1}
+                
                 for k in range(len(con2)):
-                    if ((con1[m] != 0) and (con1[m] != con2[k])):
-                        for q in range(len(con2)):
-                            if((con2[q] > 0) and (q not in double_edge)):
-                                G.add_edge((i-1)*10 + m, i*10 + q)
-                                con1[m] += -1
-                                con2[q] += -1
-                                double_edge.add(q)
-                                #k = 0
-                    elif((con1[m] != 0) and (con1[m] == con2[k]) and (k not in double_edge)):
+                    if(con1[m] == con2[k]):
                         G.add_edge((i-1)*10 + m, i*10 + k)
-                        con1[m] = 0
                         con2[k] = 0
+                        con1[m] = 0
+                    
+                    elif((con2[k] > 0) and (k not in double_edge)):
+                        G.add_edge((i-1)*10 + m, i*10 + k)
                         double_edge.add(k)
+                        con2[k] = con2[k] -1
+                        con1[m] = con1[m] -1
+                
+                                
+                                
+                                
+                                
+ 
         
 
 #The convention is that the first nodes are generally where there are faster changes over universal time, 
