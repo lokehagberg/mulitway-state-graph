@@ -121,20 +121,20 @@ for i in range(len(configuration_history_trimmed)):
         double_edge = []
         for m in range(len(con1)):
             
-            for k in range(len(con2)):
+            for n in range(len(con2)):
                 
-                if((con1[m] > 0) and (con2[k] > 0) and (con2[k] >= con1[m]) and ([m,k] not in double_edge)):
-                    G.add_edge((i-1)*10 + m, i*10 + k)
+                if((con1[m] > 0) and (con2[n] >= con1[m]) and ([m,n] not in double_edge)):
+                    G.add_edge((i-1)*10 + m, i*10 + n)
+                    con2[n] = con2[n] - con1[m]
                     con1[m] = 0
-                    con2[k] = con2[k] - con1[m]
-                    double_edge.append([m,k])
+                    double_edge.append([m,n])
                     
                 
-                elif((con1[m] > 0) and (con2[k] > 0) and (con1[m] >= con2[k]) and ([m,k] not in double_edge)):
-                    G.add_edge((i-1)*10 + m, i*10 + k)
-                    con2[k] = 0
-                    con1[m] = con1[m] - con2[k]
-                    double_edge.append([m,k])
+                elif((con1[m] > 0) and (con1[m] > con2[n]) and ([m,n] not in double_edge)):
+                    G.add_edge((i-1)*10 + m, i*10 + n)
+                    con1[m] = con1[m] - con2[n]
+                    con2[n] = 0
+                    double_edge.append([m,n])
             
                                 
         
