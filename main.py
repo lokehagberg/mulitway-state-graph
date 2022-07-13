@@ -119,26 +119,29 @@ for i in range(len(configuration_history_trimmed)):
         con2 = deepcopy(configuration_history_trimmed[i])
 
         double_edge = []
+        #set adr = 0 and bdr = 0 if you want the convention of former nodes to diverge less.
+        bdr = choice(range(len(con1)))
+
         for m in range(len(con1)):
-            
-            #set adr = 0 if you want the convention of former nodes to diverge less.
-            adr = choice(range(len(con2)))
-            #adr = 0
+            adr = choice(range(len(con2)))            
+            mbdr = ((m+bdr) % len(con1))
             
             for n in range(len(con2)):
                 
-                if((con1[m] > 0) and (con2[((m+n+adr)%len(con2))] >= con1[m]) and ([m,((m+n+adr)%len(con2))] not in double_edge)):
-                    G.add_edge((i-1)*10 + m, i*10 + ((m+n+adr)%len(con2)))
-                    con2[((m+n+adr)%len(con2))] = con2[((m+n+adr)%len(con2))] - con1[m]
-                    con1[m] = 0
-                    double_edge.append([m,((m+n+adr)%len(con2))])
+                madr = ((m+n+adr)%len(con2))
+                
+                if((con1[mbdr] > 0) and (con2[madr] >= con1[mbdr]) and ([mbdr,madr] not in double_edge)):
+                    G.add_edge((i-1)*10 + mbdr, i*10 + madr)
+                    con2[madr] = con2[madr] - con1[mbdr]
+                    con1[mbdr] = 0
+                    double_edge.append([mbdr,madr])
                     
                 
-                elif((con1[m] > 0) and (con1[m] > con2[((m+n+adr)%len(con2))]) and ([m,((m+n+adr)%len(con2))] not in double_edge)):
-                    G.add_edge((i-1)*10 + m, i*10 + ((m+n+adr)%len(con2)))
-                    con1[m] = con1[m] - con2[((m+n+adr)%len(con2))]
-                    con2[((m+n+adr)%len(con2))] = 0
-                    double_edge.append([m,((m+n+adr)%len(con2))])
+                elif((con1[mbdr] > 0) and (con1[mbdr] > con2[madr]) and ([mbdr,madr] not in double_edge)):
+                    G.add_edge((i-1)*10 + mbdr, i*10 + madr)
+                    con1[mbdr] = con1[mbdr] - con2[madr]
+                    con2[madr] = 0
+                    double_edge.append([mbdr,madr])
 
 
 print(G)
