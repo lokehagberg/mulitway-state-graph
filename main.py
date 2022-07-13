@@ -141,19 +141,22 @@ for i in range(len(configuration_history_trimmed)):
                     con1[m] = 0
                     con2[k] = 0
                     double_edge.add(k)
-                    
+
+#The convention is that the first nodes are generally where there are faster changes over universal time, 
+# frequency changes that are more changing must be added.
+
 print(G)
 nx.draw(G, pos, with_labels=True)
 plt.show()  
 
-# We have assumed that we have the following linear principles: because the change frequency is 
-# higher with some experiences, similarity is higher than not, entropy increases 
-# over known universal time, experiences of a kind stays of that kind (there are multiple
-# multiway state graphs that are coordinated). Looking at the configuration path, we will not get information about which
-# ones change frequently and which ones that do not, it gives us a set of 
-# possibilities as a function of |V|, |E|, the number of time steps and the trade-off 
-# weight between similarity and entropy (that is weighted toward similarity). 
+# We have assumed that we have the following linear principles: 
+# 1. because the change frequency is higher with some experiences, similarity is higher than not.
+# 2. experiences are more scrambled in the future as entropy increases over known universal time. 
+# 3. entropy either emerges or comes by a linearly added weight to similarity.
+# 4. experiences of a kind stays of that kind (there are multiple multiway state graphs that are coordinated). 
+# 5. the convention of having faster nodes first.
 # What then is the linear possibility set like (check frequency and spatial graphs)?  
+
 # By Life, gravity and the second law of thermodynamics - Charles H. Lineweaver, Chas A. Egan
 # and Entropy in an Expanding Universe - Steven Frautschi, entropy increases in a linear way (except possibly after
 # a large number of time-steps). Frequency statistically have a large distribution at most times, 
