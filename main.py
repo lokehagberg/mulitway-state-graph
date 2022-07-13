@@ -30,10 +30,10 @@ class Configuration_path:
 
 
 #TODO put into the class, enter starting configuration if it is used
-config_length = 4
-in_sum=4
+config_length = 3
+in_sum=3
 weight = 0.9
-timesteps = 7
+timesteps = 5
 
 configuration_path = Configuration_path(config_length=config_length, in_sum=in_sum, path_length=5, start_configuration=3)
 configurations = [np.array([configuration_path.in_sum-sum(p)] + p) for p in configuration_path.partition(configuration_path.in_sum, configuration_path.config_length-1)]
@@ -117,13 +117,15 @@ for i in range(len(configuration_history_trimmed)):
         
         con1 = deepcopy(configuration_history_trimmed[i-1])
         con2 = deepcopy(configuration_history_trimmed[i])
+
         for m in range(len(con1)):
-            while(con1[m] != 0):
-                double_edge = {-1}
+            while(con1[m] > 0):
+                double_edge = {100}
                 
                 for k in range(len(con2)):
                     if(con1[m] == con2[k]):
                         G.add_edge((i-1)*10 + m, i*10 + k)
+                        double_edge.add(k)
                         con2[k] = 0
                         con1[m] = 0
                     
@@ -134,10 +136,6 @@ for i in range(len(configuration_history_trimmed)):
                         con1[m] = con1[m] -1
                 
                                 
-                                
-                                
-                                
- 
         
 
 #The convention is that the first nodes are generally where there are faster changes over universal time, 
