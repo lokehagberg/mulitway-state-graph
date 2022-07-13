@@ -103,6 +103,7 @@ for configuration in configuration_history:
 
 print(configuration_history_trimmed)
 
+
 G = nx.Graph()
 pos = {}
 for i in range(len(configuration_history_trimmed)):
@@ -110,6 +111,7 @@ for i in range(len(configuration_history_trimmed)):
         
         G.add_node(i*10 + j)
         pos.update([(i*10 + j,[i,j])])
+
 
 for i in range(len(configuration_history_trimmed)):
 
@@ -142,12 +144,6 @@ for i in range(len(configuration_history_trimmed)):
                     con2[k] = 0
                     
 print(G)
-# print(pos)
-# G.add_node(12)
-# G.add_node(21)
-# G.add_node(22)
-# G.add_edge(11,21)
-# G.add_edge(12,22)
 nx.draw(G, pos, with_labels=True)
 plt.show()  
 
