@@ -130,13 +130,13 @@ for i in range(len(configuration_history_trimmed)):
                             k = 0
                 elif((con1[m] > 0) and (con1[m] < con2[k])):
                     for q in range(len(con1)):
-                        if((con1[q] > 0) and (q not in double_edge)):
+                        if((con1[q] > 0) and (k not in double_edge)):
                             G.add_edge((i-1)*10 + q, i*10 + k)
                             con1[q] += -1
                             con2[k] += -1
                             double_edge.add(k)
                             k = 0
-                elif((con1[m] > 0) and (con2[k] > 0)):
+                elif((con1[m] > 0) and (con2[k] > 0) and (k not in double_edge)):
                     G.add_edge((i-1)*10 + m, i*10 + k)
                     con1[m] = 0
                     con2[k] = 0
