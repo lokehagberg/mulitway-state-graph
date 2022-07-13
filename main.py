@@ -134,7 +134,7 @@ for i in range(len(configuration_history_trimmed)):
                             G.add_edge((i-1)*10 + q, i*10 + k)
                             con1[q] += -1
                             con2[k] += -1
-                            double_edge.add(q)
+                            double_edge.add(k)
                             k = 0
                 elif((con1[m] > 0) and (con2[k] > 0)):
                     G.add_edge((i-1)*10 + m, i*10 + k)
