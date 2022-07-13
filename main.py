@@ -33,7 +33,7 @@ class Configuration_path:
 config_length = 4
 in_sum=4
 weight = 0.9
-timesteps = 7
+timesteps = 10
 
 configuration_path = Configuration_path(config_length=config_length, in_sum=in_sum, path_length=5, start_configuration=3)
 configurations = [np.array([configuration_path.in_sum-sum(p)] + p) for p in configuration_path.partition(configuration_path.in_sum, configuration_path.config_length-1)]
