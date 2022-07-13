@@ -150,10 +150,10 @@ plt.show()
 
 # We have assumed that we have the following linear principles: 
 # 1. because the change frequency is higher with some experiences, similarity is higher than not.
-# 2. experiences are more scrambled in the future as entropy increases over known universal time. 
-# 3. entropy either emerges or comes by a linearly added weight probability to similarity.
-# 4. experiences of a kind stays of that kind (there are multiple multiway state graphs that are coordinated). 
-# What then is the linear possibility set like (check frequency and spatial graphs)?  
+# 2. experiences of a kind stays of that kind (there are multiple multiway state graphs that are coordinated). 
+# 3. experiences are more scrambled in the future as entropy increases over known universal time, 
+# and it adds linearly to similarity. 
+# What are the possible spatial graphs likely to look like? 
 
 # By Life, gravity and the second law of thermodynamics - Charles H. Lineweaver, Chas A. Egan
 # and Entropy in an Expanding Universe - Steven Frautschi, entropy increases in a linear way (except possibly after
