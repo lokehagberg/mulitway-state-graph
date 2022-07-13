@@ -117,30 +117,36 @@ for i in range(len(configuration_history_trimmed)):
             zer = np.array([0 for i in range(abs(diff))])
             newcon = np.concatenate((configuration_history_trimmed[i-1], zer))
             config_diff = configuration_history_trimmed[i] - newcon
+            a = 0
         
         elif diff < 0:
             zer = np.array([0 for i in range(abs(diff))])
             newcon = np.concatenate((configuration_history_trimmed[i], zer))
             config_diff = newcon - configuration_history_trimmed[i-1]
+            a = 1
         else: 
             config_diff = configuration_history_trimmed[i] - configuration_history_trimmed[i-1]
+            a = 1
 
-        m = 0
-        while len(config_diff) > m:
-            if (config_diff[m] >= 0):
-                m+=1
-            else:
+        for m in range(len(config_diff)):
+            if (0 > config_diff[m]):
                 k = 0
                 while len(config_diff) > k:
                     if (config_diff[k] > 0):
                         G.add_edge((i-1)*10 + m, i*10 + k)
                         config_diff[m] += 1
                         config_diff[k] += -1
-                        m+=1
                         k+=len(config_diff) + 1
                     else:
                         k+=1
-                m+=1
+                if(0 > config_diff[m]):
+                    m+=-1
+            elif(((configuration_history_trimmed[i-1][m] + config_diff[m]) > 0) and (a == 1)):
+                G.add_edge((i-1)*10 + m, i*10 + m)
+                config_diff[m] = 0
+            elif(((newcon[m] + config_diff[m]) > 0) and (a == 0)):
+                G.add_edge((i-1)*10 + m, i*10 + m)
+                config_diff[m] = 0
 
 
 
