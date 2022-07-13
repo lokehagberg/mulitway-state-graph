@@ -118,20 +118,20 @@ for i in range(len(configuration_history_trimmed)):
         con1 = deepcopy(configuration_history_trimmed[i-1])
         con2 = deepcopy(configuration_history_trimmed[i])
 
+        double_edge = []
         for m in range(len(con1)):
             while(con1[m] > 0):
-                double_edge = {100}
                 
                 for k in range(len(con2)):
                     if(con1[m] == con2[k]):
                         G.add_edge((i-1)*10 + m, i*10 + k)
-                        double_edge.add(k)
+                        double_edge.append([m,k])
                         con2[k] = 0
                         con1[m] = 0
                     
-                    elif((con2[k] > 0) and (k not in double_edge)):
+                    elif((con2[k] > 0) and ([m,k] not in double_edge)):
                         G.add_edge((i-1)*10 + m, i*10 + k)
-                        double_edge.add(k)
+                        double_edge.append([m,k])
                         con2[k] = con2[k] -1
                         con1[m] = con1[m] -1
                 
