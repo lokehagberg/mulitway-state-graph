@@ -115,38 +115,27 @@ for i in range(len(configuration_history_trimmed)):
         
         con1 = deepcopy(configuration_history_trimmed[i-1])
         con2 = deepcopy(configuration_history_trimmed[i])
-        for m in range(len(configuration_history_trimmed[i-1])):
-            for k in range(len(configuration_history_trimmed[i])):
-                
+        for m in range(len(con1)):
+            for k in range(len(con2)):
                 if ((con1[m] > 0) and (con1[m] > con2[k])):
-                    for q in range(len(configuration_history_trimmed[i])):
+                    for q in range(len(con2)):
                         if((q != k) and (con2[q] > 0)):
                             G.add_edge((i-1)*10 + m, i*10 + q)
                             con1[m] += -1
                             con2[q] += -1
                             m += -1
                 elif((con1[m] > 0) and (con1[m] < con2[k])):
-                    for q in range(len(configuration_history_trimmed[i-1])):
+                    for q in range(len(con1)):
                         if((q != k) and (con1[q] > 0)):
                             G.add_edge((i-1)*10 + q, i*10 + k)
                             con1[q] += -1
                             con2[k] += -1
                             m += -1
-                elif(con1[m] > 0):
+                elif((con1[m] > 0) and (con2[k] > 0)):
                     G.add_edge((i-1)*10 + m, i*10 + k)
                     con1[m] = 0
                     con2[k] = 0
                     
-           
-
-
-
-
-                        
-
-
-
-
 print(G)
 # print(pos)
 # G.add_node(12)
