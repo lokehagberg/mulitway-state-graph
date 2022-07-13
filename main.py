@@ -111,6 +111,8 @@ for i in range(len(configuration_history_trimmed)):
         G.add_node(i*10 + j)
         pos.update([(i*10 + j,[i,j])])
 
+for i in range(len(configuration_history_trimmed)):
+
     if (i != 0):
         
         con1 = deepcopy(configuration_history_trimmed[i-1])
@@ -125,7 +127,7 @@ for i in range(len(configuration_history_trimmed)):
                             con1[m] += -1
                             con2[q] += -1
                             double_edge.add(q)
-                            m += -1
+                            k += -1
                 elif((con1[m] > 0) and (con1[m] < con2[k])):
                     for q in range(len(con1)):
                         if((q != k) and (con1[q] > 0) and (q not in double_edge)):
@@ -133,7 +135,7 @@ for i in range(len(configuration_history_trimmed)):
                             con1[q] += -1
                             con2[k] += -1
                             double_edge.add(q)
-                            m += -1
+                            k += -1
                 elif((con1[m] > 0) and (con2[k] > 0)):
                     G.add_edge((i-1)*10 + m, i*10 + k)
                     con1[m] = 0
