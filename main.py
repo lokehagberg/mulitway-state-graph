@@ -121,23 +121,25 @@ for i in range(len(configuration_history_trimmed)):
         double_edge = []
         for m in range(len(con1)):
             
+            #set adr = 0 if you want the convention of former nodes to diverge less.
+            adr = choice(range(len(con2)))
+            #adr = 0
+            
             for n in range(len(con2)):
                 
-                if((con1[m] > 0) and (con2[((m+n)%len(con2))] >= con1[m]) and ([m,((m+n)%len(con2))] not in double_edge)):
-                    G.add_edge((i-1)*10 + m, i*10 + ((m+n)%len(con2)))
-                    con2[((m+n)%len(con2))] = con2[((m+n)%len(con2))] - con1[m]
+                if((con1[m] > 0) and (con2[((m+n+adr)%len(con2))] >= con1[m]) and ([m,((m+n+adr)%len(con2))] not in double_edge)):
+                    G.add_edge((i-1)*10 + m, i*10 + ((m+n+adr)%len(con2)))
+                    con2[((m+n+adr)%len(con2))] = con2[((m+n+adr)%len(con2))] - con1[m]
                     con1[m] = 0
-                    double_edge.append([m,((m+n)%len(con2))])
+                    double_edge.append([m,((m+n+adr)%len(con2))])
                     
                 
-                elif((con1[m] > 0) and (con1[m] > con2[((m+n)%len(con2))]) and ([m,((m+n)%len(con2))] not in double_edge)):
-                    G.add_edge((i-1)*10 + m, i*10 + ((m+n)%len(con2)))
-                    con1[m] = con1[m] - con2[((m+n)%len(con2))]
-                    con2[((m+n)%len(con2))] = 0
-                    double_edge.append([m,((m+n)%len(con2))])
-            
-                                
-#The convention is that nodes are more likely to stay than diverge.
+                elif((con1[m] > 0) and (con1[m] > con2[((m+n+adr)%len(con2))]) and ([m,((m+n+adr)%len(con2))] not in double_edge)):
+                    G.add_edge((i-1)*10 + m, i*10 + ((m+n+adr)%len(con2)))
+                    con1[m] = con1[m] - con2[((m+n+adr)%len(con2))]
+                    con2[((m+n+adr)%len(con2))] = 0
+                    double_edge.append([m,((m+n+adr)%len(con2))])
+
 
 print(G)
 nx.draw(G, pos, with_labels=True)
