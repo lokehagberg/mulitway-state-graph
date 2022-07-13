@@ -1,3 +1,4 @@
+from copy import deepcopy
 import math as ma
 from this import d
 import numpy as np
@@ -5,6 +6,7 @@ import numpy as np
 from numpy.random import choice
 import matplotlib.pyplot as plt
 import networkx as nx
+from psutil import CONN_FIN_WAIT1
 
 class Configuration_path:
     
@@ -110,43 +112,38 @@ for i in range(len(configuration_history_trimmed)):
         pos.update([(i*10 + j,[i,j])])
 
     if (i != 0):
-           
-        diff = len(configuration_history_trimmed[i]) - len(configuration_history_trimmed[i-1])
-        config_diff = []
-        if diff > 0:
-            zer = np.array([0 for i in range(abs(diff))])
-            newcon = np.concatenate((configuration_history_trimmed[i-1], zer))
-            config_diff = configuration_history_trimmed[i] - newcon
-            a = 0
         
-        elif diff < 0:
-            zer = np.array([0 for i in range(abs(diff))])
-            newcon = np.concatenate((configuration_history_trimmed[i], zer))
-            config_diff = newcon - configuration_history_trimmed[i-1]
-            a = 1
-        else: 
-            config_diff = configuration_history_trimmed[i] - configuration_history_trimmed[i-1]
-            a = 1
+        con1 = deepcopy(configuration_history_trimmed[i-1])
+        con2 = deepcopy(configuration_history_trimmed[i])
+        for m in range(len(configuration_history_trimmed[i-1])):
+            for k in range(len(configuration_history_trimmed[i])):
+                
+                if ((con1[m] > 0) and (con1[m] > con2[k])):
+                    for q in range(len(configuration_history_trimmed[i])):
+                        if((q != k) and (con2[q] > 0)):
+                            G.add_edge((i-1)*10 + m, i*10 + q)
+                            con1[m] += -1
+                            con2[q] += -1
+                            m += -1
+                elif((con1[m] > 0) and (con1[m] < con2[k])):
+                    for q in range(len(configuration_history_trimmed[i-1])):
+                        if((q != k) and (con1[q] > 0)):
+                            G.add_edge((i-1)*10 + q, i*10 + k)
+                            con1[q] += -1
+                            con2[k] += -1
+                            m += -1
+                elif(con1[m] > 0):
+                    G.add_edge((i-1)*10 + m, i*10 + k)
+                    con1[m] = 0
+                    con2[k] = 0
+                    
+           
 
-        for m in range(len(config_diff)):
-            if (0 > config_diff[m]):
-                k = 0
-                while len(config_diff) > k:
-                    if (config_diff[k] > 0):
-                        G.add_edge((i-1)*10 + m, i*10 + k)
-                        config_diff[m] += 1
-                        config_diff[k] += -1
-                        k+=len(config_diff) + 1
-                    else:
-                        k+=1
-                if(0 > config_diff[m]):
-                    m+=-1
-            elif(((configuration_history_trimmed[i-1][m] + config_diff[m]) > 0) and (a == 1)):
-                G.add_edge((i-1)*10 + m, i*10 + m)
-                config_diff[m] = 0
-            elif(((newcon[m] + config_diff[m]) > 0) and (a == 0)):
-                G.add_edge((i-1)*10 + m, i*10 + m)
-                config_diff[m] = 0
+
+
+
+                        
+
 
 
 
