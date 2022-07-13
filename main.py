@@ -30,10 +30,10 @@ class Configuration_path:
 
 
 #TODO put into the class, enter starting configuration if it is used
-config_length = 3
-in_sum=3
+config_length = 4
+in_sum=4
 weight = 0.9
-timesteps = 5
+timesteps = 7
 
 configuration_path = Configuration_path(config_length=config_length, in_sum=in_sum, path_length=5, start_configuration=3)
 configurations = [np.array([configuration_path.in_sum-sum(p)] + p) for p in configuration_path.partition(configuration_path.in_sum, configuration_path.config_length-1)]
@@ -123,14 +123,14 @@ for i in range(len(configuration_history_trimmed)):
             
             for k in range(len(con2)):
                 
-                if((con2[k] >= con1[m]) and ([m,k] not in double_edge)):
+                if((con1[m] > 0) and (con2[k] > 0) and (con2[k] >= con1[m]) and ([m,k] not in double_edge)):
                     G.add_edge((i-1)*10 + m, i*10 + k)
                     con1[m] = 0
                     con2[k] = con2[k] - con1[m]
                     double_edge.append([m,k])
                     
                 
-                elif((con1[m] >= con2[k]) and ([m,k] not in double_edge)):
+                elif((con1[m] > 0) and (con2[k] > 0) and (con1[m] >= con2[k]) and ([m,k] not in double_edge)):
                     G.add_edge((i-1)*10 + m, i*10 + k)
                     con2[k] = 0
                     con1[m] = con1[m] - con2[k]
