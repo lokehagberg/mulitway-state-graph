@@ -151,8 +151,7 @@ plt.show()
 # 1. because the change frequency is higher with some experiences, similarity is higher than not.
 # 2. experiences of a kind stays of that kind (there are multiple multiway state graphs that are coordinated). 
 # 3. experiences are more scrambled in the future over known universal time (entropy),
-# and it adds linearly to similarity. 
-# What are the possible spatial graphs likely to look like? 
+# and it adds linearly to similarity. [This addition might be wrong.]
 
 # By Life, gravity and the second law of thermodynamics - Charles H. Lineweaver, Chas A. Egan
 # and Entropy in an Expanding Universe - Steven Frautschi, entropy increases in a linear way (except possibly after
