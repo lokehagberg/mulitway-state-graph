@@ -1,12 +1,10 @@
 from copy import deepcopy
 import math as ma
-from this import d
 import numpy as np
 # import matplotlib.pyplot as plt 
 from numpy.random import choice
 import matplotlib.pyplot as plt
 import networkx as nx
-from psutil import CONN_FIN_WAIT1
 
 class Configuration_path:
     
