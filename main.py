@@ -114,33 +114,33 @@ for i in range(len(configuration_history_trimmed)):
 
     if (i != 0):
         
-        con1 = deepcopy(configuration_history_trimmed[i-1])
-        con2 = deepcopy(configuration_history_trimmed[i])
+        nodes_last_timestep = deepcopy(configuration_history_trimmed[i-1])
+        nodes = deepcopy(configuration_history_trimmed[i])
 
         double_edge = []
         #set adr = 0 and bdr = 0 if you want the convention of former nodes to diverge less.
-        bdr = choice(range(len(con1)))
+        random_node_last_timestep = choice(range(len(nodes_last_timestep)))
 
-        for m in range(len(con1)):
-            adr = choice(range(len(con2)))            
-            mbdr = ((m+bdr) % len(con1))
+        for m in range(len(nodes_last_timestep)):
+            random_node = choice(range(len(nodes)))            
+            edge_randomness_last_timestep = ((m+random_node_last_timestep) % len(nodes_last_timestep))
             
-            for n in range(len(con2)):
+            for n in range(len(nodes)):
                 
-                madr = ((m+n+adr)%len(con2))
+                edge_randomness = ((m+n+random_node)%len(nodes))
                 
-                if((con1[mbdr] > 0) and (con2[madr] >= con1[mbdr]) and ([mbdr,madr] not in double_edge)):
-                    G.add_edge((i-1)*10 + mbdr, i*10 + madr)
-                    con2[madr] = con2[madr] - con1[mbdr]
-                    con1[mbdr] = 0
-                    double_edge.append([mbdr,madr])
+                if((nodes_last_timestep[edge_randomness_last_timestep] > 0) and (nodes[edge_randomness] >= nodes_last_timestep[edge_randomness_last_timestep]) and ([edge_randomness_last_timestep,edge_randomness] not in double_edge)):
+                    G.add_edge((i-1)*10 + edge_randomness_last_timestep, i*10 + edge_randomness)
+                    nodes[edge_randomness] = nodes[edge_randomness] - nodes_last_timestep[edge_randomness_last_timestep]
+                    nodes_last_timestep[edge_randomness_last_timestep] = 0
+                    double_edge.append([edge_randomness_last_timestep,edge_randomness])
                     
                 
-                elif((con1[mbdr] > 0) and (con1[mbdr] > con2[madr]) and ([mbdr,madr] not in double_edge)):
-                    G.add_edge((i-1)*10 + mbdr, i*10 + madr)
-                    con1[mbdr] = con1[mbdr] - con2[madr]
-                    con2[madr] = 0
-                    double_edge.append([mbdr,madr])
+                elif((nodes_last_timestep[edge_randomness_last_timestep] > 0) and (nodes_last_timestep[edge_randomness_last_timestep] > nodes[edge_randomness]) and ([edge_randomness_last_timestep,edge_randomness] not in double_edge)):
+                    G.add_edge((i-1)*10 + edge_randomness_last_timestep, i*10 + edge_randomness)
+                    nodes_last_timestep[edge_randomness_last_timestep] = nodes_last_timestep[edge_randomness_last_timestep] - nodes[edge_randomness]
+                    nodes[edge_randomness] = 0
+                    double_edge.append([edge_randomness_last_timestep,edge_randomness])
 
 
 print(G)
